@@ -1,5 +1,5 @@
 #![allow(dead_code, unused_variables)]
-use glam::{Vec2, Vec3};
+use glam::{DVec2, Vec2, Vec3};
 use revision::revisioned;
 use serde::{Deserialize, Serialize};
 use std::fmt;
@@ -230,6 +230,16 @@ impl WorldPos {
         // 4. Finally cast to f32.
         // Since this result is relative, it is small and fits in f32.
         Vec3::new(dx as f32, dy as f32, dz as f32)
+    }
+
+    #[inline]
+    pub fn to_dvec2(&self) -> DVec2 {
+        let cs = chunk_size() as f64;
+
+        let cx = self.chunk.x as f64 * cs;
+        let cz = self.chunk.z as f64 * cs; // :O :o :O
+
+        DVec2::new(cx+self.local.x as f64, cz+self.local.z as f64)
     }
 
     #[inline]
