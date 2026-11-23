@@ -1,5 +1,5 @@
 #![allow(dead_code, unused_variables)]
-use glam::{DVec2, Vec2, Vec3};
+use glam::{DVec2, DVec3, Vec2, Vec3};
 use revision::revisioned;
 use serde::{Deserialize, Serialize};
 use std::fmt;
@@ -195,7 +195,7 @@ impl WorldPos {
     }
 
     #[inline]
-    pub fn from_world_f32(fpos: Vec3) -> Self {
+    pub fn from_vec3(fpos: Vec3) -> Self {
         let chunk_size = chunk_size() as f32;
         let cx = (fpos.x / chunk_size).floor() as i32;
         let cz = (fpos.z / chunk_size).floor() as i32;
@@ -209,7 +209,22 @@ impl WorldPos {
             },
         }
     }
+    #[inline]
+    pub fn from_dvec3(fpos: DVec3) -> Self {
+        let chunk_size = chunk_size() as f64;
 
+        let cx = (fpos.x / chunk_size).floor() as i32;
+        let cz = (fpos.z / chunk_size).floor() as i32;
+
+        Self {
+            chunk: ChunkCoord { x: cx, z: cz },
+            local: LocalPos {
+                x: (fpos.x - cx as f64 * chunk_size) as f32,
+                y: fpos.y as f32,
+                z: (fpos.z - cz as f64 * chunk_size) as f32,
+            },
+        }
+    }
     #[inline]
     pub fn to_relative_pos(&self, rel: WorldPos) -> Vec3 {
         let cs = chunk_size() as f64;
