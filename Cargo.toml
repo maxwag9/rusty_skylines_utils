@@ -1,6 +1,6 @@
 [package]
 name = "rusty_skylines_utils"
-version = "0.9.4"
+version = "0.9.4-b"
 edition = "2024"
 
 [dependencies]
